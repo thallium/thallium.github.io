@@ -1,0 +1,209 @@
+<html>
+<head>
+    <link rel="Stylesheet" type="text/css" href="style.css" />
+    <title>pb_ds</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="highlight/styles/nord.css">
+    <script src="highlight/highlight.pack.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+
+    <!-- <link rel="stylesheet" href="katex/katex.css"> -->
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <!-- <script defer src="katex/katex.js"></script> -->
+
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <!-- <script defer src="katex/dist/contrib/auto-render.js" onload="renderMathInElement(document.body);"></script> -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <p>
+    <a href="index.html">Home</a>
+    </p>
+
+    
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法"><h1 id="Basic Usage of PB_DS/ PB_DS的基础用法" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法">Basic Usage of PB_DS/ PB_DS的基础用法</a></h1></div>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table"><h2 id="Hash Table" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table">Hash Table</a></h2></div>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table-Usage"><h3 id="Usage" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table-Usage">Usage</a></h3></div>
+<pre>
+#include &lt;ext/pb_ds/assoc_container.hpp&gt;
+using namespace __gnu_pbds;
+cc_hash_table&lt;int, int&gt; table;//collision-chaining hash table
+gp_hash_table&lt;int, int&gt; table;//probing hash table
+</pre>
+
+<p>
+Use it like a <code>unordered_map</code>.
+</p>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table-A slightly better hash Function"><h3 id="A slightly better hash Function" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table-A slightly better hash Function">A slightly better hash Function</a></h3></div>
+<pre>
+struct custom_hash {
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        x ^= FIXED_RANDOM;
+        return x ^ (x &gt;&gt; 16);
+    }
+};
+</pre>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table-Unbeatable hash function"><h3 id="Unbeatable hash function" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Hash Table-Unbeatable hash function">Unbeatable hash function</a></h3></div>
+<pre>
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x &gt;&gt; 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x &gt;&gt; 27)) * 0x94d049bb133111eb;
+        return x ^ (x &gt;&gt; 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+</pre>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST"><h2 id="Balanced BST" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST">Balanced BST</a></h2></div>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration"><h3 id="Declaration" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration">Declaration</a></h3></div>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Header"><h4 id="Header" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Header">Header</a></h4></div>
+<pre>
+#include &lt;ext/pb_ds/tree_policy.hpp&gt;
+#include &lt;ext/pb_ds/assoc_container.hpp&gt;
+using namespace __gnu_pbds;
+</pre>
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Make a map"><h4 id="Make a map" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Make a map">Make a map</a></h4></div>
+<pre>
+tree&lt;int, int, less&lt;int&gt;, rb_tree_tag, tree_order_statistics_node_update&gt; t;
+</pre>
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Make a set"><h4 id="Make a set" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Make a set">Make a set</a></h4></div>
+<pre>
+tree&lt;int, null_type, less&lt;int&gt;, rb_tree_tag, tree_order_statistics_node_update&gt; t;
+</pre>
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Make a multi-set"><h4 id="Make a multi-set" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Declaration-Make a multi-set">Make a multi-set</a></h4></div>
+
+<pre>
+tree&lt;pair&lt;int,int&gt;, null_type, less&lt;pair&lt;int,int&gt;&gt;, rb_tree_tag, tree_order_statistics_node_update&gt; t;
+</pre>
+
+<p>
+Alternatively, you can use <code>std::less_equal</code>, but <code>lower_bound</code> and <code>upper_bound</code> will swap their function.
+</p>
+
+<pre>
+tree&lt;int, null_type, less_equal&lt;int&gt;, rb_tree_tag, tree_order_statistics_node_update&gt; t;
+</pre>
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Beyond std::set : ranking"><h3 id="Beyond std::set : ranking" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Beyond std::set : ranking">Beyond std::set : ranking</a></h3></div>
+
+<p>
+Your must use <code>tree_order_statistics_node_update</code> to get order statistic:
+</p>
+<pre>
+size_type order_of_key(key_const_reference);// returns the number of elements that are smaller than key
+iterator find_by_order(size_type order)// order starts from 0
+</pre>
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Use lower_bound and upper_bound to find precursor and successor"><h3 id="Use lower_bound and upper_bound to find precursor and successor" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Balanced BST-Use lower_bound and upper_bound to find precursor and successor">Use lower_bound and upper_bound to find precursor and successor</a></h3></div>
+
+<p>
+Find precursor:
+</p>
+<pre>
+*prev(t.lower_bound(x))//set
+prev(t.lower_bound({x,0}))-&gt;first//multi-set
+</pre>
+
+<p>
+Find successor
+</p>
+<pre>
+*t.upper_bound(x);//set
+*t.lower_bound({x+1,0});
+</pre>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue"><h2 id="Priority Queue" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue">Priority Queue</a></h2></div>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue-Prototype"><h3 id="Prototype" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue-Prototype">Prototype</a></h3></div>
+<pre>
+template&lt;typename  Value_Type,
+	  typename  Cmp_Fn = std::less&lt;Value_Type&gt;,
+	  typename  Tag = pairing_heap_tag,
+	  typename  Allocator = std::allocator&lt;char &gt; &gt;
+	  class priority_queue;
+</pre>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue-Usage"><h3 id="Usage" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue-Usage">Usage</a></h3></div>
+
+<p>
+Just use the default parameter and you will get the best performance(must include the namespace):
+</p>
+<pre>
+#include&lt;ext/pb_ds/priority_queue.hpp&gt;
+__gnu_pbds::priority_queue&lt;int&gt;;
+</pre>
+
+<p>
+All the five tags:
+</p>
+<ul>
+<li>
+<code>binary_heap_tag</code>
+
+<li>
+<code>binomial_heap_tag</code>
+
+<li>
+**<code>pairing_heap_tag</code>**
+
+<li>
+<code>thin_heap_tag</code>
+
+<li>
+<code>rc_binomial_heap_tag</code>
+
+</ul>
+
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue-What's different from `std::priority_queue`"><h3 id="What's different from `std::priority_queue`" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Priority Queue-What's different from `std::priority_queue`">What's different from <code>std::priority_queue</code></a></h3></div>
+
+<pre>
+point_iterator push(const_reference r_val);//return a iterator after push
+void PB_DS_CLASS_C_DEC:: join(PB_DS_CLASS_C_DEC&amp; other)//clean other after join
+void split(Pred prd,priority_queue &amp;other)  
+void modify(point_iterator it,const key) 
+begin();
+end();//begin and end iterator
+</pre>
+<div id="Basic Usage of PB_DS/ PB_DS的基础用法-Reference"><h2 id="Reference" class="header"><a href="#Basic Usage of PB_DS/ PB_DS的基础用法-Reference">Reference</a></h2></div>
+
+<p>
+<a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/policy_data_structures.html">Policy-Based Data Structure</a>
+</p>
+
+<p>
+<a href="https://codeforces.com/blog/entry/62393">Blowing up unordered_map, and how to stop getting hacked on it</a>
+</p>
+
+<p>
+<a href="https://blog.csdn.net/riba2534/article/details/80454602?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task">pb_ds库的一些常用方法</a>
+</p>
+
+<p>
+<a href="https://zhuanlan.zhihu.com/p/90104614">用 pbds 过 luogu P3369【模板】普通平衡树</a>
+</p>
+
+    <p><small>Page created on 2021-03-30</small></p>
+</body>
+</html>

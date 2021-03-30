@@ -1,0 +1,142 @@
+<html>
+<head>
+    <link rel="Stylesheet" type="text/css" href="style.css" />
+    <title>GYM102843J</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="highlight/styles/nord.css">
+    <script src="highlight/highlight.pack.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+
+    <!-- <link rel="stylesheet" href="katex/katex.css"> -->
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <!-- <script defer src="katex/katex.js"></script> -->
+
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <!-- <script defer src="katex/dist/contrib/auto-render.js" onload="renderMathInElement(document.body);"></script> -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <p>
+    <a href="index.html">Home</a>
+    </p>
+
+    
+<div id="Contents" class="toc"><h1 id="Contents">Contents</a></h1></div>
+<ul>
+<li>
+<a href="GYM102843J.html#题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting">题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting</a>
+
+<ul>
+<li>
+<a href="GYM102843J.html#题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting-Solution">Solution</a>
+
+<li>
+<a href="GYM102843J.html#题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting-Code">Code</a>
+
+</ul>
+</ul>
+
+<p>
+<span id="-动态规划/DP"></span><span class="tag" id="动态规划/DP">动态规划/DP</span>
+</p>
+
+
+<div id="题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting"><h1 id="题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting" class="header"><a href="#题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting">题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting</a></h1></div>
+<p>
+Easy to think but hard to write.
+</p>
+
+<p>
+思路比较简单但写起来不好写
+</p>
+
+
+<div id="题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting-Solution"><h2 id="Solution" class="header"><a href="#题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting-Solution">Solution</a></h2></div>
+
+<p>
+Since the radius of a circle is at most 5, we only need to check the status of 10 blocks before it, which could be represented as a binary number. Let \(dp_{i, j}\) be the number of ways to draw circles whose right boundary is \(i\), with mask of \(j\). Here if the k-th bit of the mask is 1, it means that you can put a circle whose left boundary is \(i-k\).
+</p>
+
+<p>
+For a fixed right boundary, there are 5 possible positions for center, so \(2^5\) circle combinations. So our strategy is that for each position, we check \(2^{10}\) masks and \(2^5\) circle combinations, then transition if possible.
+</p>
+
+<p>
+In order to make coding easier, we could calculate some helper array: <code>le</code> is the mask for the left boundary of the corresponding center mask, all the bits in <code>mhi[i]</code> to the right of the highest bit of <code>le[i]</code> is set to 1 to make positions inside the circle unavailable for the next position.
+</p>
+
+<div id="题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting-Code"><h2 id="Code" class="header"><a href="#题解/Tutorial for 2020 CCPC Changchun Onsite J (GYM102832J) - Abstract Painting-Code">Code</a></h2></div>
+
+<p>
+<a href="https://codeforces.com/gym/102832/submission/99671702">credits</a>
+</p>
+
+<pre>
+#include &lt;bits/stdc++.h&gt;
+
+#define all(x) (x).begin(),(x).end()
+#define sz(x) int(x.size())
+
+using namespace std;
+using ll = long long;
+using pii = pair&lt;int, int&gt;;
+template&lt;typename... T&gt; void rd(T&amp;... args) {((cin&gt;&gt;args), ...);}
+template&lt;typename... T&gt; void wr(T... args) {((cout&lt;&lt;args&lt;&lt;" "), ...);cout&lt;&lt;endl;}
+
+constexpr int mod=1e9+7;
+ll dp[1010][1&lt;&lt;10];
+int already[1010];
+int le[32], mhi[32];
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int n, k;
+    cin&gt;&gt;n&gt;&gt;k;
+    for (int i=0; i&lt;k; i++) {
+        int c, r;
+        cin&gt;&gt;c&gt;&gt;r;
+        already[c+r]|=(1&lt;&lt;(r-1));
+    }
+
+    for (int i=0; i&lt;32; i++) {
+        for (int j=0; j&lt;5; j++) {
+            if (i&gt;&gt;j&amp;1) {
+                le[i]|=(1&lt;&lt;(2*j+1));
+                mhi[i]=(1&lt;&lt;(2*j+1))-1;
+            }
+        }
+    }
+    dp[0][0]=1;
+    for (int i=0; i&lt;=n; i++) {
+        for (int mask=0; mask&lt;1024; mask++) {
+            if (!dp[i][mask]) continue;
+            for (int k=0; k&lt;32; k++) {
+                if ((already[i]&amp;k) != already[i]) continue;
+                if ((mask &amp; le[k]) != le[k]) continue;
+                int nxt=mask-(mask &amp; mhi[k]);
+                nxt=(2*nxt+1)&amp;1023;
+                (dp[i+1][nxt]+=dp[i][mask])%=mod;
+            }
+        }
+
+    }
+    ll ans=0;
+    for (int i=0; i&lt;1024; i++) (ans+=dp[n+1][i])%=mod;
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>
+
+    <p><small>Page created on 2021-03-30</small></p>
+</body>
+</html>
