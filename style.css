@@ -4,7 +4,7 @@
     font-size: 110%;
     }
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) and (min-width: 8cm){
     body {
     margin: 2em 4em auto;
     font-size: 110%;
