@@ -1,15 +1,33 @@
 <html>
 <head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="Stylesheet" type="text/css" href="style.css" />
     <title>posts</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="highlight/styles/nord.css">
+    <script src="highlight/highlight.pack.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
-    <p>
-    <a href="index.html">Home</a>
-    </p>
+    <div class="header">
+        <a href="index.html">← HOME</a>
+    </div>
+    <hr>
+
     
 <div id="Solutions"><h2 id="Solutions" class="header"><a href="#Solutions">Solutions</a></h2></div>
 <ul>
