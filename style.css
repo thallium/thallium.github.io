@@ -187,7 +187,7 @@ del {
 }
 
 code {
-  font-family: Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
+  font-family: "Fira Code", "Menlo", Monaco,"DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace;
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
   border-radius: 1px;
